@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Canadian Radar Wallpaper</string>
+    <string name="wallpaper_description">Live Canadian weather radar and precipitation forecast</string>
+</resources>
