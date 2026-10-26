@@ -41,8 +41,9 @@ class WeatherWallpaperService : WallpaperService() {
         override fun onVisibilityChanged(isVisible: Boolean) {
             visible = isVisible
             if (visible) {
-                refreshWeather()
-                handler.removeCallbacks(refreshTask)
+    drawWallpaper()
+    refreshWeather()
+    handler.removeCallbacks(refreshTask)
                 handler.postDelayed(refreshTask, 6 * 60 * 1000L)
             } else {
                 handler.removeCallbacks(refreshTask)
