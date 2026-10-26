@@ -22,6 +22,9 @@ class WeatherWallpaperService : WallpaperService() {
     override fun onCreateEngine(): Engine = RadarEngine()
 
     inner class RadarEngine : Engine() {
+        init {
+    android.util.Log.e("CanadianRadar", "RadarEngine CREATED")
+        }
         private val handler = Handler(Looper.getMainLooper())
         private var radar: Bitmap? = null
         private var forecast = "Loading precipitation forecast..."
