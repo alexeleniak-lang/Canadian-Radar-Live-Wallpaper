@@ -196,7 +196,6 @@ class WeatherWallpaperService : WallpaperService() {
         }
 
         private fun drawWallpaper() {
-            if (!visible) return
 
             val holder = surfaceHolder
             var canvas: Canvas? = null
