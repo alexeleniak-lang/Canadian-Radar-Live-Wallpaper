@@ -282,3 +282,6 @@ private fun drawWallpaper() {
     }
 }
 
+    }
+}
+
