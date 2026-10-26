@@ -195,71 +195,90 @@ class WeatherWallpaperService : WallpaperService() {
             }
         }
 
-        private fun drawWallpaper() {
 
-            val holder = surfaceHolder
-            var canvas: Canvas? = null
+private fun drawWallpaper() {
+    val holder = surfaceHolder
+    var canvas: Canvas? = null
 
+    try {
+        canvas = holder.lockCanvas() ?: return
+
+        val width = canvas.width.toFloat()
+        val height = canvas.height.toFloat()
+
+        canvas.drawColor(Color.rgb(12, 20, 29))
+
+        radar?.let {
+            val paint = Paint(Paint.FILTER_BITMAP_FLAG)
+            canvas.drawBitmap(
+                it,
+                null,
+                Rect(0, 0, width.toInt(), height.toInt()),
+                paint
+            )
+
+            val shade = Paint().apply {
+                color = Color.argb(65, 5, 12, 20)
+            }
+            canvas.drawRect(0f, 0f, width, height, shade)
+        }
+
+        val panel = Paint().apply {
+            color = Color.argb(220, 10, 20, 31)
+        }
+
+        canvas.drawRoundRect(
+            28f, 65f, width - 28f, 250f,
+            24f, 24f, panel
+        )
+
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textSize = 32f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+        }
+
+        canvas.drawText(
+            "CANADIAN RADAR",
+            48f, 115f, textPaint
+        )
+
+        textPaint.textSize = 24f
+        textPaint.typeface = android.graphics.Typeface.DEFAULT
+
+        canvas.drawText(
+            forecast,
+            48f, 160f, textPaint
+        )
+
+        textPaint.textSize = 20f
+        textPaint.color = Color.LTGRAY
+
+        canvas.drawText(
+            lastUpdated,
+            48f, 205f, textPaint
+        )
+
+        textPaint.textSize = 18f
+
+        canvas.drawText(
+            "Radar: Environment Canada",
+            32f, height - 45f, textPaint
+        )
+
+    } catch (e: Exception) {
+        android.util.Log.e(
+            "CanadianRadar",
+            "Wallpaper drawing failed",
+            e
+        )
+    } finally {
+        if (canvas != null) {
             try {
-                canvas = holder.lockCanvas() ?: return
-                val width = canvas.width.toFloat()
-                val height = canvas.height.toFloat()
-
-                canvas.drawColor(Color.rgb(12, 20, 29))
-
-                radar?.let {
-                    val paint = Paint(Paint.FILTER_BITMAP_FLAG)
-                    canvas.drawBitmap(
-                        it,
-                        null,
-                        Rect(0, 0, width.toInt(), height.toInt()),
-                        paint
-                    )
-
-                    val shade = Paint().apply {
-                        color = Color.argb(65, 5, 12, 20)
-                    }
-                    canvas.drawRect(0f, 0f, width, height, shade)
-                }
-
-                val panel = Paint().apply {
-                    color = Color.argb(205, 10, 20, 31)
-                }
-                canvas.drawRoundRect(
-                    28f, 65f, width - 28f, 235f,
-                    24f, 24f, panel
-                )
-
-                val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    color = Color.WHITE
-                    textSize = 32f
-                    typeface = android.graphics.Typeface.DEFAULT_BOLD
-                }
-                canvas.drawText("CANADIAN RADAR", 48f, 115f, textPaint)
-
-                textPaint.textSize = 24f
-                textPaint.typeface = android.graphics.Typeface.DEFAULT
-                canvas.drawText(forecast, 48f, 160f, textPaint)
-
-                textPaint.textSize = 20f
-                textPaint.color = Color.LTGRAY
-                canvas.drawText(lastUpdated, 48f, 205f, textPaint)
-
-                textPaint.textSize = 18f
-                canvas.drawText(
-                    "Radar: Environment Canada",
-                    32f, height - 45f, textPaint
-                )
+                holder.unlockCanvasAndPost(canvas)
             } catch (_: Exception) {
-                // The wallpaper will redraw when the surface becomes available.
-            } finally {
-                if (canvas != null) {
-                    try {
-                        holder.unlockCanvasAndPost(canvas)
-                    } catch (_: Exception) {
-                    }
-                }
             }
         }
     }
 }
+
